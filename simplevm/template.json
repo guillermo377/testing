@@ -19,7 +19,7 @@
             "type": "SecureString"
         },
         "virtualMachines_SimpleVM01_name": {
-            "defaultValue": "SimpleVMtEST",
+            "defaultValue": "SimpleVMtCommit",
             "type": "String"
         },
         "virtualNetworks_SimpleVM_vnet_name": {
