@@ -1,0 +1,473 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "extensions_Microsoft.Insights.VMDiagnosticsSettings_xmlCfg": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountName": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountKey": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountEndPoint": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "virtualMachines_SimpleVM01_name": {
+            "defaultValue": "SimpleVMtEST",
+            "type": "String"
+        },
+        "virtualNetworks_SimpleVM_vnet_name": {
+            "defaultValue": "SimpleVM-vnet",
+            "type": "String"
+        },
+        "networkInterfaces_simplevm01929_name": {
+            "defaultValue": "simplevm01929",
+            "type": "String"
+        },
+        "publicIPAddresses_SimpleVM01_ip_name": {
+            "defaultValue": "SimpleVM01-ip",
+            "type": "String"
+        },
+        "storageAccounts_simplevmdiag397_name": {
+            "defaultValue": "simplevmdiag397",
+            "type": "String"
+        },
+        "networkSecurityGroups_SimpleVM01_nsg_name": {
+            "defaultValue": "SimpleVM01-nsg",
+            "type": "String"
+        },
+        "schedules_shutdown_computevm_simplevm01_name": {
+            "defaultValue": "shutdown-computevm-simplevm01",
+            "type": "String"
+        },
+        "subnets_default_name": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "extensions_Microsoft.Insights.VMDiagnosticsSettings_name": {
+            "defaultValue": "Microsoft.Insights.VMDiagnosticsSettings",
+            "type": "String"
+        },
+        "virtualMachines_SimpleVM01_id": {
+            "defaultValue": "/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Compute/disks/SimpleVM01_OsDisk_1_df346cec3cb54484bdac256a065422bd",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Compute/virtualMachines/SimpleVM01'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_SimpleVM01_name')]",
+            "apiVersion": "2018-10-01",
+            "location": "North Europe",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_A2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsDesktop",
+                        "offer": "Windows-10",
+                        "sku": "rs5-pro",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_SimpleVM01_name'),'_OsDisk_1_df346cec3cb54484bdac256a065422bd')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[parameters('virtualMachines_SimpleVM01_id')]"
+                        },
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_SimpleVM01_name')]",
+                    "adminUsername": "Guillermo",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_simplevm01929_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_simplevmdiag397_name'), '.blob.core.windows.net', '/')]"
+                    }
+                },
+                "licenseType": "Windows_Client"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_simplevm01929_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_simplevmdiag397_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourcegroups/simplevm/providers/microsoft.devtestlab/schedules/shutdown-computevm-simplevm01'.",
+            "type": "microsoft.devtestlab/schedules",
+            "name": "[parameters('schedules_shutdown_computevm_simplevm01_name')]",
+            "apiVersion": "2016-05-15",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "1900"
+                },
+                "timeZoneId": "Romance Standard Time",
+                "notificationSettings": {
+                    "status": "Enabled",
+                    "timeInMinutes": 30
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_SimpleVM01_name'))]",
+                "provisioningState": "Succeeded",
+                "uniqueIdentifier": "edf38e14-44f1-42ec-9ac1-a440b800ea70"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_SimpleVM01_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Network/networkInterfaces/simplevm01929'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_simplevm01929_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "f08e58ba-2abc-445e-8a73-5eacac3c36cc",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"3297c033-c95e-49e1-aebc-0d3f88a423cd\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SimpleVM01_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SimpleVM_vnet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "2bmh3xi0vz1urfseqyco3n4vja.parx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-3C-3C-5F",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SimpleVM01_nsg_name'))]"
+                },
+                "primary": true,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SimpleVM01_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SimpleVM_vnet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SimpleVM01_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Network/networkSecurityGroups/SimpleVM01-nsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_SimpleVM01_nsg_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "659a6d92-7dbc-46e7-aac0-8c6d0f5c6d9a",
+                "securityRules": [],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "etag": "W/\"e6fd1585-0f2f-4548-9380-3cc9add6bf89\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Network/publicIPAddresses/SimpleVM01-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "name": "[parameters('publicIPAddresses_SimpleVM01_ip_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "fc4e88e6-7dc9-4d72-8a7f-259926ea5ba5",
+                "ipAddress": "52.143.169.144",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Network/virtualNetworks/SimpleVM-vnet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_SimpleVM_vnet_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "dd7e58e0-ae1a-4877-9644-8604eeb7d548",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/24"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "etag": "W/\"051c1a08-4564-463f-bd9a-f91b9c3af60d\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.0.0.0/24",
+                            "delegations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Storage/storageAccounts/simplevmdiag397'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_simplevmdiag397_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "francecentral",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Compute/virtualMachines/SimpleVM01/extensions/Microsoft.Insights.VMDiagnosticsSettings'.",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualMachines_SimpleVM01_name'), '/', parameters('extensions_Microsoft.Insights.VMDiagnosticsSettings_name'))]",
+            "apiVersion": "2018-10-01",
+            "location": "francecentral",
+            "scale": null,
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "StorageAccount": "simplevmdiag397",
+                    "xmlCfg": "[parameters('extensions_Microsoft.Insights.VMDiagnosticsSettings_xmlCfg')]"
+                },
+                "publisher": "Microsoft.Azure.Diagnostics",
+                "type": "IaaSDiagnostics",
+                "typeHandlerVersion": "1.5",
+                "protectedSettings": {
+                    "storageAccountName": "[parameters('extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountName')]",
+                    "storageAccountKey": "[parameters('extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountKey')]",
+                    "storageAccountEndPoint": "[parameters('extensions_Microsoft.Insights.VMDiagnosticsSettings_storageAccountEndPoint')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_SimpleVM01_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/c35bc2ea-271c-4289-b868-6328e912f6eb/resourceGroups/SimpleVM/providers/Microsoft.Network/virtualNetworks/SimpleVM-vnet/subnets/default'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_SimpleVM_vnet_name'), '/', parameters('subnets_default_name'))]",
+            "apiVersion": "2018-12-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.0.0.0/24",
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SimpleVM_vnet_name'))]"
+            ]
+        }
+    ]
+}
