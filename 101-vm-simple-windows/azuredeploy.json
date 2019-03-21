@@ -20,60 +20,68 @@
         "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
       }
     },
-      "vmName": {
-        "type": "string",
-        "metadata": {
-          "description": "Name for the Virtual Machine."
-        }
-      },
-      "vmSize":{
-        "type":"string",
-        "defaultValue": "Standard_A1_V2",
-        "allowedValues": [
-          "Standard_A1_V2",
-          "Standard_A2_V2",
-          "Standard_A4_V2"
-        ],
-        "metadata": {
-          "description":"The size for the VM."
-        }
-      },
-      "documentsDiskSize":{
-        "type":"int",
-        "defaultValue": "25",
-        "allowedValues": [
-          "50",
-          "75",
-          "100"
-        ],
-        "metadata": {
-          "description":"The size for document's disk."
-        }
-      },
-      "windowsOSVersion": {
-        "type": "string",
-        "defaultValue": "2008-R2-SP1",
-        "allowedValues": [
-          "2008-R2-SP1",
-          "2012-Datacenter",
-          "2012-R2-Datacenter",
-          "2016-Nano-Server",
-          "2016-Datacenter-with-Containers",
-          "2016-Datacenter",
-          "2019-Datacenter"
-        ],
-        "metadata": {
-          "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
-        }
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Location for all resources."
-        }
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
       }
     },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_A1_V2",
+      "allowedValues": [
+        "Standard_A1_V2",
+        "Standard_A2_V2",
+        "Standard_A4_V2"
+      ],
+      "metadata": {
+        "description": "The size for the VM."
+      }
+    },
+    "documentsDiskSize": {
+      "type": "int",
+      "defaultValue": "25",
+      "allowedValues": [
+        "50",
+        "75",
+        "100"
+      ],
+      "metadata": {
+        "description": "The size for document's disk."
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2008-R2-SP1",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "2016-Nano-Server",
+        "2016-Datacenter-with-Containers",
+        "2016-Datacenter",
+        "2019-Datacenter"
+      ],
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "vmDiskInitializationModule": {
+      "type": "string",
+      "defaultValue": "https://github.com/guillermo377/testing/raw/master/101-vm-simple-windows/vmDiskInitializationModule.ps1.zip"
+    },
+    "vmDiskInitializationFunction": {
+      "type": "string",
+      "defaultValue": "vmDiskInitializationModule.ps1\\Initialize_DataDisk"
+    }
+  },
     "variables": {
       "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'savm')]",
       "nicName": "myVMNic",
@@ -82,7 +90,9 @@
       "subnetPrefix": "10.0.0.0/24",
       "publicIPAddressName": "myPublicIP",
       "virtualNetworkName": "MyVNET",
-      "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
+      "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
+      "vmDiskInitializationArchiveFolder": "DSC",
+      "vmDiskInitializationArchiveFileName": "vmDiskInitialization.zip"
     },
     "resources": [
       {
@@ -211,7 +221,40 @@
               "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
             }
           }
-        }
+        },
+        "resources": [
+          {
+            "name": "vmDiskInitialization",
+            "type": "extensions",
+            "location": "[parameters('location')]",
+            "apiVersion": "2016-03-30",
+            "dependsOn": [
+              "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            ],
+            "tags": {
+              "displayName": "vmDiskInitialization"
+            },
+            "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.9",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "configuration": {
+                  "url": "[parameters('vmDiskInitializationModule')]",
+                  "script": "[parameters('vmDiskInitializationFunction')]",
+                  "function": "Main"
+                },
+                "configurationArguments": {
+                  "MachineName": "[parameters('vmName')]"
+                }
+              },
+              "protectedSettings": {
+      
+              }
+            }
+          }
+        ]
       }
     ],
     "outputs": {
