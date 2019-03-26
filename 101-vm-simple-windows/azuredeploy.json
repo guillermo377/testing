@@ -28,11 +28,11 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_A1_V2",
+      "defaultValue": "Standard_B2s",
       "allowedValues": [
-        "Standard_A1_V2",
-        "Standard_A2_V2",
-        "Standard_A4_V2"
+        "Standard_B2s",
+        "Standard_B2ms",
+        "Standard_B4ms"
       ],
       "metadata": {
         "description": "The size for the VM."
@@ -40,11 +40,10 @@
     },
     "documentsDiskSize": {
       "type": "int",
-      "defaultValue": "25",
+      "defaultValue": 512,
       "allowedValues": [
-        "50",
-        "75",
-        "100"
+        512,
+        1024
       ],
       "metadata": {
         "description": "The size for document's disk."
@@ -52,9 +51,8 @@
     },
     "windowsOSVersion": {
       "type": "string",
-      "defaultValue": "2008-R2-SP1",
+      "defaultValue": "2016-Datacenter",
       "allowedValues": [
-        "2008-R2-SP1",
         "2012-Datacenter",
         "2012-R2-Datacenter",
         "2016-Nano-Server",
@@ -72,14 +70,28 @@
       "metadata": {
         "description": "Location for all resources."
       }
-    },
-    "vmDiskInitializationModule": {
+    }, 
+    "firstGroupName": {
       "type": "string",
-      "defaultValue": "https://github.com/guillermo377/testing/raw/master/101-vm-simple-windows/vmDiskInitializationModule.ps1.zip"
+      "defaultValue": "HR",
+      "metadata": {
+        "description": "First Share to Create."
+      } 
     },
-    "vmDiskInitializationFunction": {
+    "secondGroupName": {
       "type": "string",
-      "defaultValue": "vmDiskInitializationModule.ps1\\Initialize_DataDisk"
+      "defaultValue": "IT",
+      "metadata": {
+        "description": "Second Share to Create."
+      } 
+    },
+    "vmSetFileServerModule": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/guillermo377/testing/master/101-vm-simple-windows/vmSetFileServerModule.ps1.zip"
+    },
+    "vmSetFileServerFunction": {
+      "type": "string",
+      "defaultValue": "SetFileServer.ps1\\SetFileServer"
     }
   },
     "variables": {
@@ -92,7 +104,7 @@
       "virtualNetworkName": "MyVNET",
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
       "vmDiskInitializationArchiveFolder": "DSC",
-      "vmDiskInitializationArchiveFileName": "vmDiskInitialization.zip"
+      "vmDiskInitializationArchiveFileName": "vmSetFileServerModule.zip"
     },
     "resources": [
       {
@@ -196,14 +208,14 @@
             "dataDisks": [
               {
                 "name":"Data",
-                "diskSizeGB": 1023,
+                "diskSizeGB": 512,
                 "lun": 0,
                 "createOption": "Empty"
               },
               {
                 "name":"Documents",
                 "diskSizeGB": "[parameters('DocumentsDiskSize')]",
-                "lun": 0,
+                "lun": 1,
                 "createOption":"Empty"
               }
             ]
@@ -224,7 +236,7 @@
         },
         "resources": [
           {
-            "name": "vmDiskInitialization",
+            "name": "vmSetFileServer",
             "type": "extensions",
             "location": "[parameters('location')]",
             "apiVersion": "2016-03-30",
@@ -232,7 +244,7 @@
               "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
             ],
             "tags": {
-              "displayName": "vmDiskInitialization"
+              "displayName": "vmSetFileServer"
             },
             "properties": {
               "publisher": "Microsoft.Powershell",
@@ -241,10 +253,15 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 "configuration": {
-                  "url": "[parameters('vmDiskInitializationModule')]",
-                  "script": "[parameters('vmDiskInitializationFunction')]",
+                  "url": "[parameters('vmSetFileServerModule')]",
+                  "script": "[parameters('vmSetFileServerFunction')]",
                   "function": "Main"
                 },
+                "properties": {
+                  "FirstGroupName": "[parameters('firstGroupName')]",
+                  "SecondGroupName": "[parameters('secondGroupName')]"
+                  },
+
                 "configurationArguments": {
                   "MachineName": "[parameters('vmName')]"
                 }
