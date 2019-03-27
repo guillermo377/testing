@@ -95,7 +95,7 @@
     },
     "vmSetFileServerFunction": {
       "type": "string",
-      "defaultValue": "SetFileServer.ps1\\vmSetFileServerFunction"
+      "defaultValue": "SetFileServer.ps1\\SetFileServer"
     }
   },
     "variables": {

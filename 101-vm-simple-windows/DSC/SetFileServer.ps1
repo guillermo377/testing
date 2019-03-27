@@ -5,7 +5,7 @@
 
         [Parameter(Mandatory)]
         [String]$FirstGroupName,
-        [Parameter(Mandatory)]
+        ##[Parameter(Mandatory)]
         [String]$SecondGroupName,
 
         [Int]$RetryCount=40,
@@ -21,7 +21,7 @@
 
         xWaitforDisk Disk2
         {
-             DiskNumber = 2
+             DiskId = 2
              RetryIntervalSec = $RetryIntervalSec
              RetryCount = $RetryCount
         }
@@ -29,7 +29,7 @@
 
         xDisk HVolume
         {
-             DiskNumber = 2
+             DiskId = 2
              DriveLetter = 'H'
              FSLabel = $FirstGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk2'
@@ -39,7 +39,7 @@
         xWaitForDisk Disk3
 
         {
-             DiskNumber = 3
+             DiskId = 3
              RetryIntervalSec = $RetryIntervalSec
              RetryCount = $RetryCount
         }
@@ -48,7 +48,7 @@
         xDisk IVolume
 
         {
-             DiskNumber = 3
+             DiskId = 3
              DriveLetter = 'I'
              FSLabel = $SecondGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk3'
@@ -177,8 +177,6 @@
 
             }
 
-
-
-   }
+}
 
 } 
