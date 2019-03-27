@@ -5,7 +5,7 @@
 
         [Parameter(Mandatory)]
         [String]$FirstGroupName,
-        ##[Parameter(Mandatory)]
+        [Parameter(Mandatory)]
         [String]$SecondGroupName,
 
         [Int]$RetryCount=40,
