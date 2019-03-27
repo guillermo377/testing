@@ -87,11 +87,15 @@
     },
     "vmSetFileServerModule": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/guillermo377/testing/master/101-vm-simple-windows/vmSetFileServerModule.zip"
+      "defaultValue": "https://raw.githubusercontent.com/guillermo377/testing/master/101-vm-simple-windows/vmSetFileServerModule.ps1.zip"
+    },
+    "vmSetFileServerScript": {
+      "type": "string",
+      "defaultValue": "SetFileServer.ps1"
     },
     "vmSetFileServerFunction": {
       "type": "string",
-      "defaultValue": "SetFileServer.ps1"
+      "defaultValue": "SetFileServer.ps1\\vmSetFileServerFunction"
     }
   },
     "variables": {
@@ -104,7 +108,7 @@
       "virtualNetworkName": "MyVNET",
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
       "vmDiskInitializationArchiveFolder": "DSC",
-      "vmDiskInitializationArchiveFileName": "vmSetFileServerModule.zip"
+      "vmDiskInitializationArchiveFileName": "vmSetFileServerModule.ps1.zip"
     },
     "resources": [
       {
@@ -254,8 +258,8 @@
               "settings": {
                 "configuration": {
                   "url": "[parameters('vmSetFileServerModule')]",
-                  "script": "[parameters('vmSetFileServerFunction')]",
-                  "function": "SetFileServer"
+                  "script": "[parameters('vmSetFileServerScript')]",
+                  "function": "[parameters('vmSetFileServerFunction')]"
                 },
                 "properties": {
                   "FirstGroupName": "[parameters('firstGroupName')]",
