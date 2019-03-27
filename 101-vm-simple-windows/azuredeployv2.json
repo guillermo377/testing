@@ -243,8 +243,8 @@
                 "modulesUrl": "[concat(variables('dscUri'), '/', variables('dscZipFile'))]",
                 "configurationFunction": "[variables('dscConfiguration')]",
                 "properties": {
-                    "FirstGroup": "[parameters('FirstGroupName')]",
-                    "SecondGroup": "[parameters('SecondGroupName')]"
+                    "FirstGroupName": "[parameters('FirstGroupName')]",
+                    "SecondGroupName": "[parameters('SecondGroupName')]"
                 }
             },
             "protectedSettings": {

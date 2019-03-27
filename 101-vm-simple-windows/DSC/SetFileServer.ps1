@@ -138,7 +138,7 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = "[File]ShareFolderOne","[Group]GroupOne"
+                 DependsOn = "[File]ShareFolderOne","[Group]GroupOne","[xDisk]HVolume"
                  Principal = $FirstGroupName +'SecurityGroup'
                  Path = 'H:\'+ $FirstGroupName +'Data'
                  AccessControlInformation = @(
@@ -160,7 +160,7 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = "[File]ShareFolderTwo","[Group]GroupTwo"
+                 DependsOn = "[File]ShareFolderOne","[Group]GroupOne","[xDisk]IVolume"
                  Principal = $SecondGroupName +'SecurityGroup'
                  Path = 'I:\'+ $SecondGroupName +'Data'
                  AccessControlInformation = @(
