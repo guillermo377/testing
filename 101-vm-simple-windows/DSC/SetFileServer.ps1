@@ -21,7 +21,7 @@
 
         xWaitforDisk Disk2
         {
-             DiskId = 2
+             DiskNumber = 2
              RetryIntervalSec = $RetryIntervalSec
              RetryCount = $RetryCount
         }
@@ -29,7 +29,7 @@
 
         xDisk HVolume
         {
-             DiskId = 2
+             DiskNumber = 2
              DriveLetter = 'H'
              FSLabel = $FirstGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk2'
@@ -39,7 +39,7 @@
         xWaitForDisk Disk3
 
         {
-             DiskId = 3
+             DiskNumber = 3
              RetryIntervalSec = $RetryIntervalSec
              RetryCount = $RetryCount
         }
@@ -48,7 +48,7 @@
         xDisk IVolume
 
         {
-             DiskId = 3
+             DiskNumber = 3
              DriveLetter = 'I'
              FSLabel = $SecondGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk3'
