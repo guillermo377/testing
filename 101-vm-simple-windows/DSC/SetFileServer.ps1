@@ -74,7 +74,7 @@
 
              Ensure = 'Present'
              Type = 'Directory'
-             DestinationPath = 'H:\'+ $FirstGroupName +'Data'
+             DestinationPath = $PathOne
              DependsOn = '[xDisk]HVolume','[WindowsFeature]FileServices'
 
            }
@@ -86,7 +86,7 @@
 
              Ensure = 'Present'
              Type = 'Directory'
-             DestinationPath = 'I:\'+ $SecondGroupName +'Data'
+             DestinationPath = $PathTwo
              DependsOn = '[xDisk]IVolume','[WindowsFeature]FileServices'
 
            }
