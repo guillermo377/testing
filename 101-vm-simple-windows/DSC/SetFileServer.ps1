@@ -7,6 +7,8 @@
         [String]$FirstGroupName,
         [Parameter(Mandatory)]
         [String]$SecondGroupName,
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential]$AdminCreds,
 
         [Int]$RetryCount=40,
         [Int]$RetryIntervalSec=60
@@ -138,7 +140,8 @@
 
             {
                  Ensure = 'Present'
-                 ##DependsOn = '[File]ShareFolderOne','[Group]GroupOne','[xDisk]HVolume'
+                 PsDscRunAsCredential = '$AdminCreds'
+                 DependsOn = '[File]ShareFolderOne'
                  Principal = $FirstGroupName +'SecurityGroup'
                  Path = 'H:\'+ $FirstGroupName +'Data'
                  AccessControlInformation = @(
@@ -160,7 +163,8 @@
 
             {
                  Ensure = 'Present'
-                 ##DependsOn = '[File]ShareFolderOne','[Group]GroupOne','[xDisk]IVolume'
+                 PsDscRunAsCredential = '$AdminCreds'
+                 DependsOn = '[File]ShareFolderTwo'
                  Principal = $SecondGroupName +'SecurityGroup'
                  Path = 'I:\'+ $SecondGroupName +'Data'
                  AccessControlInformation = @(
