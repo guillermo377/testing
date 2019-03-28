@@ -8,6 +8,8 @@
         [Parameter(Mandatory)]
         [String]$SecondGroupName,
 
+        [String]$PathOne = ("H:\$FirstGroupName" + "Data"),
+        [String]$PathTwo = ("I:\$SecondGroupName" + "Data"),
         [Int]$RetryCount=80,
         [Int]$RetryIntervalSec=120
 
@@ -138,9 +140,9 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[File]ShareFolderOne'
+                 DependsOn = '[File]ShareFolderOne'       
                  Principal = $FirstGroupName +'SecurityGroup'
-                 Path = 'H:\'+ $FirstGroupName +'Data'
+                 Path = $PathOne
                  AccessControlInformation = @(
 
                        cNtfsAccessControlInformation
@@ -162,7 +164,7 @@
                  Ensure = 'Present'
                  DependsOn = '[File]ShareFolderTwo'
                  Principal = $SecondGroupName +'SecurityGroup'
-                 Path = 'I:\'+ $SecondGroupName +'Data'
+                 Path = $PathTwo
                  AccessControlInformation = @(
 
                        cNtfsAccessControlInformation
