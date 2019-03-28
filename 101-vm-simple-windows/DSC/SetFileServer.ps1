@@ -33,6 +33,7 @@
         {
              DiskNumber = 2
              DriveLetter = 'H'
+             FSFormat = 'NTFS'
              FSLabel = $FirstGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk2'
 
@@ -52,6 +53,7 @@
         {
              DiskNumber = 3
              DriveLetter = 'I'
+             FSFormat = 'NTFS'
              FSLabel = $SecondGroupName + 'Data'
              DependsOn = '[xWaitforDisk]Disk3'
 
