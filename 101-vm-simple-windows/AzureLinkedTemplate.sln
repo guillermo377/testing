@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureLinkedTemplate", "AzureLinkedTemplate\AzureLinkedTemplate.deployproj", "{B1453A48-BFC1-4C7D-94CC-763FB7DA492F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1453A48-BFC1-4C7D-94CC-763FB7DA492F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1453A48-BFC1-4C7D-94CC-763FB7DA492F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1453A48-BFC1-4C7D-94CC-763FB7DA492F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1453A48-BFC1-4C7D-94CC-763FB7DA492F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F407BFE1-EDB8-4055-A1CA-049AD2964E92}
+	EndGlobalSection
+EndGlobal
