@@ -168,7 +168,7 @@
 
                        {
                             AccessControlType = 'Allow'
-                            FileSystemRights = 'Read,Write,Modify'
+                            FileSystemRights = 'ReadAndExecute'
                             Inheritance = 'ThisFolderSubfoldersAndFiles'
                             NoPropagateInherit = $false
                        }
@@ -190,7 +190,7 @@
 
                        {
                             AccessControlType = 'Allow'
-                            FileSystemRights = 'Read,Write,Modify'
+                            FileSystemRights = 'ReadAndExecute'
                             Inheritance = 'ThisFolderSubfoldersAndFiles'
                             NoPropagateInherit = $false
                        }
