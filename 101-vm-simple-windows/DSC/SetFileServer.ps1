@@ -138,11 +138,28 @@
             }
 
 
+        File TestDirectoryOne
+
+            {
+                Ensure = 'Present'
+                DestinationPath = $PathOne
+                Type = 'Directory'
+            }
+
+        File TestDirectoryTwo
+
+            {
+                Ensure = 'Present'
+                DestinationPath = $PathTwo
+                Type = 'Directory'
+            }
+        
+        
         cNtfsPermissionEntry 'FileShareRightsOne'
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[File]ShareFolderOne','[xDisk]HVolume'      
+                 DependsOn = '[File]TestDirectoryOne'
                  Principal = $FirstGroupName +'SecurityGroup'
                  Path = $PathOne
                  AccessControlInformation = @(
@@ -164,7 +181,7 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[File]ShareFolderTwo','[xDisk]IVolume' 
+                 DependsOn = '[File]TestDirectoryTwo' 
                  Principal = $SecondGroupName +'SecurityGroup'
                  Path = $PathTwo
                  AccessControlInformation = @(
