@@ -164,7 +164,7 @@
             ObjectType = "Directory"
             Path = $PathOne
             Principal = $FirstGroupName +'SecurityGroup'
-            AccessMask = [System.Security.AccessControl.FileSystemRights]::Full
+            AccessMask = [System.Security.AccessControl.FileSystemRights]::Modify
             AppliesTo = "Object, ChildContainers"  # Apply to the folder and subfolders only
 
             }
@@ -178,7 +178,7 @@
             ObjectType = "Directory"
             Path = $PathTwo
             Principal = $SecondGroupName +'SecurityGroup'
-            AccessMask = [System.Security.AccessControl.FileSystemRights]::Full
+            AccessMask = [System.Security.AccessControl.FileSystemRights]::Modify
             AppliesTo = "Object, ChildContainers"  # Apply to the folder and subfolders only
 
             }    
