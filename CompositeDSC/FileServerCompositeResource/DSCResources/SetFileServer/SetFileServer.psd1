@@ -1,1 +1,1 @@
-﻿RootModule = ‘SetFileServer.schema.psm1’
+﻿RootModule = '.\SetFileServer.schema.psm1'
