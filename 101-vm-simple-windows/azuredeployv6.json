@@ -95,7 +95,8 @@
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
       "dscUri": "https://raw.githubusercontent.com/guillermo377/testing/master/101-vm-simple-windows/",
       "dscZipFile": "vmSetFileServerModule.ps1.zip",
-      "dscConfiguration": "SetFileServerv2.ps1\\SetFileServer"
+      "dscConfiguration": "SetFileServerv2.ps1\\SetFileServer",
+      "dscConfiguration2": "SetFileServerv2.ps1\\SetRights"
     },
     "resources": [
       {
