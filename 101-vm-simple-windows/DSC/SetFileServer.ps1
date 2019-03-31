@@ -8,8 +8,8 @@
         [Parameter(Mandatory)]
         [String]$SecondGroupName,
 
-        ##[String]$PathOne = ("H:\$FirstGroupName" + "Data"),
-        ##[String]$PathTwo = ("I:\$SecondGroupName" + "Data"),
+        [String]$PathOne = ("H:\$FirstGroupName" + "Data"),
+        [String]$PathTwo = ("I:\$SecondGroupName" + "Data"),
         [Int]$RetryCount=80,
         [Int]$RetryIntervalSec=120
 
