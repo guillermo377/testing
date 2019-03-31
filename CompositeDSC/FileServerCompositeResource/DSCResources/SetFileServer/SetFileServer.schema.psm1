@@ -151,50 +151,6 @@
                 DestinationPath = $PathTwo
                 Type = 'Directory'
             }
-        
-        
-        cNtfsPermissionEntry 'FileShareRightsOne'
-
-            {
-                 Ensure = 'Present'
-                 DependsOn = '[xDisk]HVolume'
-                 Principal = $FirstGroupName +'SecurityGroup'
-                 Path = 'H:\TreassuryData'
-                 AccessControlInformation = @(
-
-                       cNtfsAccessControlInformation
-
-                       {
-                            AccessControlType = 'Allow'
-                            FileSystemRights = 'ReadAndExecute'
-                            Inheritance = 'ThisFolderSubfoldersAndFiles'
-                            NoPropagateInherit = $false
-                       }
-                 )
-
-            }
-
-
-        cNtfsPermissionEntry 'FileShareRightsTwo'
-
-            {
-                 Ensure = 'Present'
-                 DependsOn = '[xDisk]IVolume' 
-                 Principal = $SecondGroupName +'SecurityGroup'
-                 Path = 'I:\AccountingData'
-                 AccessControlInformation = @(
-
-                       cNtfsAccessControlInformation
-
-                       {
-                            AccessControlType = 'Allow'
-                            FileSystemRights = 'ReadAndExecute'
-                            Inheritance = 'ThisFolderSubfoldersAndFiles'
-                            NoPropagateInherit = $false
-                       }
-                 )
-
-            }
 
 }
 
