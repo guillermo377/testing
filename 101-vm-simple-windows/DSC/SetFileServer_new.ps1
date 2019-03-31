@@ -8,14 +8,14 @@
         [Parameter(Mandatory)]
         [String]$SecondGroupName,
 
-        ##[String]$PathOne = ("H:\$FirstGroupName" + "Data"),
-        ##[String]$PathTwo = ("I:\$SecondGroupName" + "Data"),
+        [String]$PathOne = ("H:\$FirstGroupName" + "Data"),
+        [String]$PathTwo = ("I:\$SecondGroupName" + "Data"),
         [Int]$RetryCount=80,
         [Int]$RetryIntervalSec=120
 
     ) 
     
-    Import-DscResource -ModuleName xStorage,xSmbShare,PSDesiredStateConfiguration,cNtfsAccessControl
+    Import-DscResource -ModuleName xStorage,xSmbShare,PSDesiredStateConfiguration,PowerShellAccessControl
 
     Node localhost
     {
@@ -155,49 +155,34 @@
             }
         
         
-        cNtfsPermissionEntry 'FileShareRightsOne'
-
+        cAccessControlEntry RightsFirstShare 
+        
             {
-                 Ensure = 'Present'
-                 DependsOn = '[File]TestDirectoryOne'
-                 Principal = $FirstGroupName +'SecurityGroup'
-                 Path = 'H:\TreassuryData'
-                 AccessControlInformation = @(
 
-                       cNtfsAccessControlInformation
-
-                       {
-                            AccessControlType = 'Allow'
-                            FileSystemRights = 'ReadAndExecute'
-                            Inheritance = 'ThisFolderSubfoldersAndFiles'
-                            NoPropagateInherit = $false
-                       }
-                 )
+            AceType = "AccessAllowed"
+            DependsOn = '[File]TestDirectoryOne'
+            ObjectType = "Directory"
+            Path = $PathOne
+            Principal = $FirstGroupName +'SecurityGroup'
+            AccessMask = [System.Security.AccessControl.FileSystemRights]::Modify
+            AppliesTo = "Object, ChildContainers"  # Apply to the folder and subfolders only
 
             }
 
-
-        cNtfsPermissionEntry 'FileShareRightsTwo'
-
+        cAccessControlEntry RightsSecondShare 
+        
             {
-                 Ensure = 'Present'
-                 DependsOn = '[File]TestDirectoryTwo' 
-                 Principal = $SecondGroupName +'SecurityGroup'
-                 Path = 'I:\AccountingData'
-                 AccessControlInformation = @(
 
-                       cNtfsAccessControlInformation
+            AceType = "AccessAllowed"
+            DependsOn = '[File]TestDirectoryTwo'
+            ObjectType = "Directory"
+            Path = $PathTwo
+            Principal = $SecondGroupName +'SecurityGroup'
+            AccessMask = [System.Security.AccessControl.FileSystemRights]::Modify
+            AppliesTo = "Object, ChildContainers"  # Apply to the folder and subfolders only
 
-                       {
-                            AccessControlType = 'Allow'
-                            FileSystemRights = 'ReadAndExecute'
-                            Inheritance = 'ThisFolderSubfoldersAndFiles'
-                            NoPropagateInherit = $false
-                       }
-                 )
+            }    
 
-            }
-
-}
+    }
 
 } 
