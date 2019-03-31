@@ -134,15 +134,32 @@
                 Ensure = "Present"
                 GroupName = $SecondGroupName +'SecurityGroup'
             }
+
+
+        File TestDirectoryOne
+
+            {
+                Ensure = 'Present'
+                DestinationPath = $PathOne
+                Type = 'Directory'
+            }
+
+        File TestDirectoryTwo
+
+            {
+                Ensure = 'Present'
+                DestinationPath = $PathTwo
+                Type = 'Directory'
+            }
         
         
         cNtfsPermissionEntry 'FileShareRightsOne'
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[xWaitforDisk]Disk2'
+                 DependsOn = '[xDisk]HVolume'
                  Principal = $FirstGroupName +'SecurityGroup'
-                 Path = $PathOne
+                 Path = 'H:\TreassuryData'
                  AccessControlInformation = @(
 
                        cNtfsAccessControlInformation
@@ -162,9 +179,9 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[xWaitforDisk]Disk3' 
+                 DependsOn = '[xDisk]IVolume' 
                  Principal = $SecondGroupName +'SecurityGroup'
-                 Path = $PathTwo
+                 Path = 'I:\AccountingData'
                  AccessControlInformation = @(
 
                        cNtfsAccessControlInformation
