@@ -135,12 +135,27 @@
                 GroupName = $SecondGroupName +'SecurityGroup'
             }
         
+        xWaitForVolume "VolumeOne"
+
+            {
+                DriveLetter = 'H'
+                RetryCount = $RetryCount
+                RetryIntervalSec = $RetryIntervalSec
+            }
+
+        xWaitForVolume "VolumeTwo"
+
+            {
+                DriveLetter = 'I'
+                RetryCount = $RetryCount
+                RetryIntervalSec = $RetryIntervalSec
+            }
         
         cNtfsPermissionEntry 'FileShareRightsOne'
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[xWaitforDisk]Disk2'
+                 DependsOn = '[xWaitForVolume]VolumeOne'
                  Principal = $FirstGroupName +'SecurityGroup'
                  Path = $PathOne
                  AccessControlInformation = @(
@@ -162,7 +177,7 @@
 
             {
                  Ensure = 'Present'
-                 DependsOn = '[xWaitforDisk]Disk3' 
+                 DependsOn = '[xWaitForVolume]VolumeTwo' 
                  Principal = $SecondGroupName +'SecurityGroup'
                  Path = $PathTwo
                  AccessControlInformation = @(
